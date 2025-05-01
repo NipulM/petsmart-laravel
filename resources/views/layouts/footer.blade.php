@@ -10,6 +10,7 @@
                 <h3 class="font-semibold mb-4">Quick Links</h3>
                 <ul class="space-y-2">
                     <li><a href="{{ route('dashboard') }}" class="hover:underline">Home</a></li>
+                    <li><a href="{{ route('search') }}" class="hover:underline">Search</a></li>
                     <li><a href="{{ route('subscription') }}" class="hover:underline">Subscription Plans</a></li>
                     <li><a href="{{ route('about-us') }}" class="hover:underline">About us / Blogs</a></li>
                 </ul>

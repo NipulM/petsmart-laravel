@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 
@@ -22,6 +21,10 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 Route::get('/subscription', [App\Http\Controllers\SubscriptionController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('subscription');
+
+Route::get('/search', [App\Http\Controllers\SearchController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('search');
 
 Route::get('/about-us', [App\Http\Controllers\AboutusController::class, 'index'])
     ->middleware(['auth', 'verified'])
