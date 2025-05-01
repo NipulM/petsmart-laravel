@@ -58,6 +58,19 @@
         <!-- Care & Comfort Section -->
         <h2 id="blogs" class="text-2xl font-bold mb-7">Care & Comfort Corner</h2>
         <div id="blog-container" class="bg-white rounded-lg shadow-lg overflow-hidden">
+            @foreach ($blogs as $blog)
+            <div class="flex w-full">
+                <div class="w-2/5">
+                    <div class="relative w-full h-[300px] m-5">
+                        <img src="{{ $blog->image_url }}" class="absolute top-0 left-0 w-full h-full object-cover rounded-2xl">
+                    </div>
+                </div>
+                <div class="w-3/5 p-12">
+                    <h3 class="text-xl font-bold mb-4">{{ $blog->title }}</h3>
+                    <p class="text-gray-700">{{ $blog->content }}</p>
+                </div>
+            </div>
+            @endforeach
         </div>
     </main>
 
