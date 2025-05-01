@@ -15,6 +15,10 @@ Route::get('/subscription', [App\Http\Controllers\SubscriptionController::class,
     ->middleware(['auth', 'verified'])
     ->name('subscription');
 
+Route::get('/about-us', [App\Http\Controllers\AboutusController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('about-us');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
