@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="text-center mt-8 pt-4 border-t border-green-400">
-            © 2024 PetSmart. All rights reserved.
+            © 2025 PetSmart. All rights reserved.
         </div>
     </div>
 </footer>
