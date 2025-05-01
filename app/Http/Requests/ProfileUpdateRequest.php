@@ -25,6 +25,19 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+            'phone' => ['nullable', 'string', 'max:15'],
+            'address' => ['nullable', 'string'],
+            'bio' => ['nullable', 'string'],
+            'pet_info' => ['nullable', 'array'],
+            'pet_info.pet_name' => ['nullable', 'string', 'max:255'],
+            'pet_info.age' => ['nullable', 'string', 'max:50'],
+            'pet_info.breed' => ['nullable', 'string', 'max:255'],
+            'pet_info.weight' => ['nullable', 'string', 'max:50'],
+            'pet_info.medicalHistory' => ['nullable', 'string'],
+            'pet_info.specialRequirements' => ['nullable', 'string'],
+            'pet_info.vaccinations' => ['nullable', 'array'],
+            'pet_info.vaccinations.rabies' => ['nullable', 'boolean'],
+            'pet_info.vaccinations.dhpp' => ['nullable', 'boolean'],
         ];
     }
 }
