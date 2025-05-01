@@ -1,5 +1,5 @@
 <footer class="bg-green-500 text-white py-8">
-    <div class="container mx-auto px-4">
+    <div class="max-w-7xl mx-auto px-4">
         <div class="grid grid-cols-3 gap-8">
             <div>
                 <p class="text-4xl mb-4">Petsmart</p>
