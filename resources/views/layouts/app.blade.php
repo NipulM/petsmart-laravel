@@ -33,6 +33,7 @@
 
         @include('layouts.footer')
     </div>
+    <script src="{{ asset('js/cart.js') }}"></script>
 </body>
 
 </html>

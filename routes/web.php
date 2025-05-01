@@ -1,15 +1,23 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/products/{product}', function ($product) {
+    return view('products.show', [
+        'product' => \App\Models\Product::findOrFail($product)
+    ]);
+})->name('products.show');
+
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::get('/subscription', [App\Http\Controllers\SubscriptionController::class, 'index'])
     ->middleware(['auth', 'verified'])

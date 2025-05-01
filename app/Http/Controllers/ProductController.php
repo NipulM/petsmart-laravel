@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
+    // Add this method for web routes
+    public function show($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('products.show', compact('product'));
+    }
+
     public function getNewProducts(): JsonResponse
     {
         try {
