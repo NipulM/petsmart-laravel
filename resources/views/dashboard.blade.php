@@ -59,6 +59,44 @@
 
             </div>
         </section>
+
+        <section class="bg-[#F8F8F8] py-16">
+            <div class="container mx-auto">
+                <h2 class="text-3xl font-bold mb-8">Simplify Pet Care with Tailored Subscription Plans</h2>
+                <p class="text-gray-600 mb-8 -mt-5">
+                    Say goodbye to the stress of running out of pet essentials. With PetSmart's flexible subscription plans, you'll get regular deliveries tailored to your needs—keeping your pets happy, healthy, and entertained all year round.
+                </p>
+
+                <div class="grid grid-cols-2 gap-8">
+                    @foreach($subscriptions as $subscription)
+                    <div class="bg-white shadow-md rounded-lg p-6 flex flex-col items-center text-center h-full">
+                        <div class="h-48 w-full flex items-center justify-center overflow-hidden mb-4">
+                            <img src="{{ $subscription->plan_type === 'Basic' ? asset('images/basic-box.webp') : asset('images/premium-box.png') }}"
+                                alt="{{ $subscription->plan_type }} Subscription Box"
+                                class="object-cover h-full w-full rounded-md">
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">{{ $subscription->plan_type }}</h3>
+                        <p class="text-gray-600 mb-6">{{ $subscription->description }}</p>
+                        <div class="flex-grow flex items-center justify-center mb-6">
+                            <ul class="text-left">
+                                @foreach(json_decode($subscription->features) as $feature)
+                                <li class="flex items-center mb-2">
+                                    <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>{{ $feature }}</span>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <a href="{{ route('subscription') }}#plans" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded">
+                            Subscribe to {{ $subscription->plan_type }}
+                        </a>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
     </div>
 
     <script>
