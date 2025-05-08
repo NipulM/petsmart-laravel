@@ -1,0 +1,20 @@
+name: petsmart
+services:
+  - name: petsmart-laravel
+    github:
+      repo: NipulM/petsmart-laravel
+      branch: main
+      deploy_on_push: true
+    run_command: php -S 0.0.0.0:$PORT -t public
+    environment_slug: php
+    instance_size_slug: basic-xxs
+    instance_count: 1
+    routes:
+      - path: /
+    envs:
+      - key: APP_ENV
+        value: local
+      - key: APP_DEBUG
+        value: true
+      - key: LOG_CHANNEL
+        value: stderr
