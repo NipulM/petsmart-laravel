@@ -39,7 +39,7 @@
                                 <button
                                     class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
                                     onclick="event.stopPropagation(); handleCartClick(this)"
-                                    data-id="{{ $product->id }}"
+                                    data-id="{{ $product->product_id }}"
                                     data-price="{{ $product->price }}"
                                     data-name="{{ $product->name }}"
                                     data-image="{{ $product->image_url }}"
@@ -108,5 +108,16 @@
                 });
             });
         });
+
+        function handleCartClick(button) {
+            const productId = button.dataset.id;
+            const price = parseFloat(button.dataset.price);
+            const name = button.dataset.name;
+            const imageUrl = button.dataset.image;
+            const stockQuantity = parseInt(button.dataset.stock);
+            const category = button.dataset.category;
+
+            addToCart(productId, price, name, imageUrl, stockQuantity, category);
+        }
     </script>
 </x-app-layout>
