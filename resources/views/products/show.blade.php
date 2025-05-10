@@ -52,7 +52,7 @@
                     </div>
                     @else
                     <button disabled class="bg-gray-300 text-gray-500 font-bold py-3 px-6 rounded w-full md:w-auto cursor-not-allowed">
-                        Out of Stockk
+                        Out of Stockkk
                     </button>
                     @endif
                 </div>
