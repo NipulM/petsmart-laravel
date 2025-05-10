@@ -32,16 +32,24 @@
                     </div>
 
                     @if($product->stock_quantity > 0)
-                    <button
-                        class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded w-full md:w-auto add-to-cart-btn"
-                        data-product-id="{{ $product->product_id }}"
-                        data-price="{{ $product->price }}"
-                        data-name="{{ $product->name }}"
-                        data-image-url="{{ $product->image_url }}"
-                        data-stock="{{ $product->stock_quantity }}"
-                        data-category="{{ $product->category ? $product->category->name : '' }}">
-                        Add to Cart
-                    </button>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="flex items-center border rounded">
+                            <button type="button" class="px-3 py-3 bg-gray-100 hover:bg-gray-200 text-gray-600 quantity-decrease">-</button>
+                            <input type="number" id="quantity-input" class="w-16 px-3 py-3 text-center border-0 focus:ring-0 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" value="1" min="1"
+                                data-max-stock="{{ $product->stock_quantity }}" style="-webkit-appearance: none;">
+                            <button type="button" class="px-3 py-3 bg-gray-100 hover:bg-gray-200 text-gray-600 quantity-increase">+</button>
+                        </div>
+                        <button
+                            class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded flex-1 add-to-cart-btn"
+                            data-product-id="{{ $product->product_id }}"
+                            data-price="{{ $product->price }}"
+                            data-name="{{ $product->name }}"
+                            data-image="{{ $product->image_url }}"
+                            data-stock="{{ $product->stock_quantity }}"
+                            data-category="{{ $product->category ? $product->category->name : '' }}">
+                            Add to Cart
+                        </button>
+                    </div>
                     @else
                     <button disabled class="bg-gray-300 text-gray-500 font-bold py-3 px-6 rounded w-full md:w-auto cursor-not-allowed">
                         Out of Stock
@@ -51,4 +59,39 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const quantityInput = document.getElementById('quantity-input');
+            const maxStock = parseInt(quantityInput.dataset.maxStock);
+
+            document.querySelector('.quantity-decrease').addEventListener('click', function() {
+                decrementQuantity();
+            });
+
+            document.querySelector('.quantity-increase').addEventListener('click', function() {
+                incrementQuantity(maxStock);
+            });
+
+            quantityInput.addEventListener('change', function() {
+                validateQuantity(maxStock);
+            });
+
+            quantityInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+
+            document.querySelector('.add-to-cart-btn').addEventListener('click', function() {
+                const btn = this;
+                addToCartWithQuantity(
+                    parseInt(btn.dataset.productId),
+                    parseFloat(btn.dataset.price),
+                    btn.dataset.name,
+                    btn.dataset.image,
+                    parseInt(btn.dataset.stock),
+                    btn.dataset.category
+                );
+            });
+        });
+    </script>
 </x-app-layout>

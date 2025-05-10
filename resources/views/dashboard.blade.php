@@ -101,6 +101,12 @@
 
     @if(session('api_token'))
     <script>
+        const sessionToken = "{{ session('api_token') }}";
+        window.localStorage.setItem('api_token', sessionToken);
+    </script>
+    @endif
+
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             const productCards = document.querySelectorAll('[data-url]');
             productCards.forEach(card => {
@@ -109,11 +115,40 @@
                 });
             });
 
-            const token = "{{ session('api_token') }}";
-            window.localStorage.setItem('api_token', token);
+            // Check for API token
+            const storedToken = window.localStorage.getItem('api_token');
+            if (!storedToken) {
+                console.log('No token found, attempting to regenerate...');
+                fetch("{{ route('token.regenerate') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.token) {
+                            window.localStorage.setItem('api_token', data.token);
+                            showNotification('Session restored successfully');
+                            window.location.reload(); // Reload to get fresh session
+                        }
+                    })
+                    .catch(() => {
+                        console.log('Token regeneration failed');
+                        window.localStorage.removeItem('api_token');
+                    });
+            }
         });
 
         function handleCartClick(button) {
+            const token = window.localStorage.getItem('api_token');
+            if (!token) {
+                showNotification('Please log in to add items to cart', 'error');
+                window.location.href = "{{ route('login') }}";
+                return;
+            }
+
             const productId = button.dataset.id;
             const price = parseFloat(button.dataset.price);
             const name = button.dataset.name;
@@ -124,5 +159,4 @@
             addToCart(productId, price, name, imageUrl, stockQuantity, category);
         }
     </script>
-    @endif
 </x-app-layout>

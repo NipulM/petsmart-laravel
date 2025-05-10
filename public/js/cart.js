@@ -1,3 +1,79 @@
+function validateQuantity(maxStock) {
+    const input = document.getElementById('quantity-input');
+    let value = parseInt(input.value);
+    
+    if (isNaN(value) || value < 1) {
+        value = 1;
+    } else if (value > maxStock) {
+        value = maxStock;
+        showNotification('Maximum stock limit reached', 'error');
+    }
+    
+    input.value = value;
+}
+
+function incrementQuantity(maxStock) {
+    const input = document.getElementById('quantity-input');
+    const currentValue = parseInt(input.value);
+    if (currentValue < maxStock) {
+        input.value = currentValue + 1;
+    } else {
+        showNotification('Maximum stock limit reached', 'error');
+    }
+}
+
+function decrementQuantity() {
+    const input = document.getElementById('quantity-input');
+    const currentValue = parseInt(input.value);
+    if (currentValue > 1) {
+        input.value = currentValue - 1;
+    }
+}
+
+function addToCartWithQuantity(productId, price, name, imageUrl, stockQuantity, category) {
+    const quantityInput = document.getElementById('quantity-input');
+    const quantity = parseInt(quantityInput.value);
+    
+    if (isNaN(quantity) || quantity < 1) {
+        showNotification('Please enter a valid quantity', 'error');
+        return;
+    }
+    
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const existingItemIndex = cart.findIndex(item => item.id === parseInt(productId));
+    
+    if (existingItemIndex > -1) {
+        const newQuantity = cart[existingItemIndex].quantity + quantity;
+        if (newQuantity <= stockQuantity) {
+            cart[existingItemIndex].quantity = newQuantity;
+            showNotification('Item quantity updated in cart');
+        } else {
+            showNotification('Cannot add more of this item - stock limit reached', 'error');
+            return;
+        }
+    } else {
+        if (quantity <= stockQuantity) {
+            cart.push({
+                id: parseInt(productId),
+                name: name,
+                price: price,
+                imageUrl: imageUrl,
+                quantity: quantity,
+                category: category,
+                stockQuantity: stockQuantity
+            });
+            showNotification('Item added to cart');
+        } else {
+            showNotification('Cannot add more than available stock', 'error');
+            return;
+        }
+    }
+    
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCounter();
+    updateCartModal();
+}
+
 function addToCart(productId, price, name, imageUrl, stockQuantity, category, event) {
     if (event) {
         event.stopPropagation();

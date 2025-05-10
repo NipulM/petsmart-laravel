@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\Auth\TokenController;
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
@@ -36,4 +37,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/orders', [OrdersController::class, 'store']);
     Route::get('/get-orders', [OrdersController::class, 'getUserOrders']);
+
+    Route::post('/token/regenerate', [TokenController::class, 'regenerate'])->name('token.regenerate');
 });
