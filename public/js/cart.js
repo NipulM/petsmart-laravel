@@ -107,6 +107,14 @@ function checkout() {
         showNotification('Your cart is empty', 'error');
         return;
     }
+
+    const token = localStorage.getItem('api_token');
+    console.log(token);
+    if (!token) {
+        showNotification('Please log in to place an order', 'error');
+        return;
+    }
+
     const form = document.getElementById('billing-form');
     const formData = new FormData(form);
     
@@ -131,7 +139,7 @@ function checkout() {
         headers: {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'Authorization': `Bearer 8|S4WDBAfRFxtCBXmo5o8hw7TkRRQV2IEbOtQNSWLL94a481d1`
+            'Authorization': `Bearer ${localStorage.getItem('api_token')}`
         },
         body: JSON.stringify(orderData)
     })

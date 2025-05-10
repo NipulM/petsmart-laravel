@@ -33,6 +33,14 @@
                     class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
                     Pet Information
                 </button>
+                <button
+                    type="button"
+                    @click="activeTab = 'orders'"
+                    :class="{'border-indigo-500 text-indigo-600 dark:text-indigo-400': activeTab === 'orders',
+                            'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400': activeTab !== 'orders'}"
+                    class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    Order History
+                </button>
             </nav>
         </div>
 
@@ -143,6 +151,86 @@
                                 <span class="ml-2">{{ __('DHPP') }}</span>
                             </label>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order History Tab -->
+            <div x-show="activeTab === 'orders'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+                <div x-data="{ orders: [], loading: true }" x-init="
+                    fetch('/api/get-orders', {
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
+                            'Authorization': `Bearer ${localStorage.getItem('api_token')}`
+                        },
+                        credentials: 'include'
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            orders = data.data.orders;
+                            loading = false;
+                        })
+                        .catch(error => {
+                            console.error('Error fetching orders:', error);
+                            loading = false;
+                        })
+                ">
+                    <div x-show="loading" class="text-center py-4">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500 mx-auto"></div>
+                        <p class="mt-2 text-gray-600 dark:text-gray-400">Loading orders...</p>
+                    </div>
+
+                    <div x-show="!loading && orders.length === 0" class="text-center py-4">
+                        <p class="text-gray-600 dark:text-gray-400">No orders found.</p>
+                    </div>
+
+                    <div x-show="!loading && orders.length > 0" class="space-y-4">
+                        <template x-for="order in orders" :key="order._id">
+                            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100" x-text="'Order #' + order._id"></h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400" x-text="'Date: ' + new Date(order.created_at).toLocaleDateString()"></p>
+                                    </div>
+                                    <span :class="{
+                                        'px-2 py-1 text-xs font-semibold rounded-full': true,
+                                        'bg-yellow-100 text-yellow-800': order.status === 'pending',
+                                        'bg-green-100 text-green-800': order.status === 'delivered',
+                                        'bg-blue-100 text-blue-800': order.status === 'processing'
+                                    }" x-text="order.status"></span>
+                                </div>
+
+                                <div class="mt-4">
+                                    <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100">Order Items:</h4>
+                                    <div class="mt-2 space-y-2">
+                                        <template x-for="item in JSON.parse(order.order_items)" :key="item.id">
+                                            <div class="flex items-center space-x-4">
+                                                <img :src="item.imageUrl" :alt="item.name" class="w-16 h-16 object-cover rounded">
+                                                <div>
+                                                    <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="item.name"></p>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-400" x-text="'Quantity: ' + item.quantity"></p>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-400" x-text="'Price: $' + item.price"></p>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                    <div class="flex justify-between items-center">
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">Total Amount:</p>
+                                        <p class="text-lg font-medium text-gray-900 dark:text-gray-100" x-text="'$' + order.total_amount"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </div>

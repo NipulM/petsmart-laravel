@@ -99,6 +99,7 @@
         </section>
     </div>
 
+    @if(session('api_token'))
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const productCards = document.querySelectorAll('[data-url]');
@@ -107,6 +108,9 @@
                     window.location.href = this.dataset.url;
                 });
             });
+
+            const token = "{{ session('api_token') }}";
+            window.localStorage.setItem('api_token', token);
         });
 
         function handleCartClick(button) {
@@ -120,4 +124,5 @@
             addToCart(productId, price, name, imageUrl, stockQuantity, category);
         }
     </script>
+    @endif
 </x-app-layout>
