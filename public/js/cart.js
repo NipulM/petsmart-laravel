@@ -102,11 +102,58 @@ function updateCartModal() {
 }
 
 function checkout() {
-    // You can implement checkout logic here
-    alert('Proceeding to checkout...');
-    // closeCartModal();
-}
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    if (cart.length === 0) {
+        showNotification('Your cart is empty', 'error');
+        return;
+    }
+    const form = document.getElementById('billing-form');
+    const formData = new FormData(form);
+    
+    const totalAmount = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
 
+    const orderData = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        phone_number: formData.get('phone'),
+        address: formData.get('address'),
+        order_items: cart,
+        total_amount: totalAmount,
+        status: 'pending',
+        created_at: new Date().toISOString(),
+        delivered_at: null
+    };
+
+    console.log(document.querySelector('meta[name="csrf-token"]').content);
+
+    fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Authorization': `Bearer 8|S4WDBAfRFxtCBXmo5o8hw7TkRRQV2IEbOtQNSWLL94a481d1`
+        },
+        body: JSON.stringify(orderData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        if (data.status === 'success') {
+            showNotification('Order placed successfully!');
+            // Clear cart
+            localStorage.setItem('cart', '[]');
+            updateCartCounter();
+            updateCartModal();
+            closeCartModal();
+        } else {
+            showNotification(data.message || 'Failed to place order', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Failed to place order', 'error');
+    });
+}
 
 function updateItemQuantity(productId, newQuantity) {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');

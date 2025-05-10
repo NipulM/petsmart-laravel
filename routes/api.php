@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\OrdersController;
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
@@ -32,4 +33,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{id}', [ProductController::class, 'updateProduct']);
         Route::delete('/{id}', [ProductController::class, 'deleteProduct']);
     });
+
+    Route::post('/orders', [OrdersController::class, 'store']);
 });

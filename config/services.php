@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'mongodb' => [
+        'endpoint' => env('MONGODB_API_ENDPOINT'),
+        'key' => env('MONGODB_API_KEY'),
+    ],
 ];
