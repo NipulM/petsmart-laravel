@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\Auth\TokenController;
+use App\Http\Controllers\BlogController;
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
@@ -33,6 +34,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [ProductController::class, 'createProduct']);
         Route::put('/{id}', [ProductController::class, 'updateProduct']);
         Route::delete('/{id}', [ProductController::class, 'deleteProduct']);
+    });
+
+    // Blog routes
+    Route::prefix('blogs')->group(function () {
+        Route::get('/', [BlogController::class, 'getAllBlogPosts']);
+        Route::get('/{id}', [BlogController::class, 'getBlogPostById']);
+        Route::post('/', [BlogController::class, 'createBlogPost']);
     });
 
     Route::post('/orders', [OrdersController::class, 'store']);

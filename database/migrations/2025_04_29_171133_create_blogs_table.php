@@ -14,7 +14,7 @@ class CreateBlogsTable extends Migration
             $table->string('title', 255);
             $table->text('content');
             $table->string('image_url', 2083);
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
         });
     }
 
