@@ -51,7 +51,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::post('/orders', [OrdersController::class, 'store']);
-    Route::get('/get-orders', [OrdersController::class, 'getUserOrders']);
+    Route::get('/orders', [OrdersController::class, 'getUserOrders']);
 
     Route::post('/token/regenerate', [TokenController::class, 'regenerate'])->name('token.regenerate');
 });
