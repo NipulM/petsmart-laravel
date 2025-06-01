@@ -29,6 +29,7 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+                @auth
                 <!-- Cart Icon -->
                 <button id="cart-button" class="relative p-2 mr-4 text-gray-500 hover:text-gray-700 focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -131,6 +132,12 @@
                         </form>
                     </x-slot>
                 </x-dropdown>
+                @else
+                <div class="flex items-center space-x-4">
+                    <a href="{{ route('login') }}" class="text-sm text-gray-700 hover:text-gray-900">Log in</a>
+                    <a href="{{ route('register') }}" class="ml-4 text-sm text-white bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-700">Register</a>
+                </div>
+                @endauth
             </div>
 
             <!-- Hamburger -->
@@ -163,6 +170,7 @@
         </div>
 
         <!-- Responsive Settings Options -->
+        @auth
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
@@ -187,5 +195,17 @@
                 </form>
             </div>
         </div>
+        @else
+        <div class="pt-4 pb-1 border-t border-gray-200">
+            <div class="px-4 py-2 space-y-1">
+                <x-responsive-nav-link :href="route('login')">
+                    {{ __('Log in') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('register')">
+                    {{ __('Register') }}
+                </x-responsive-nav-link>
+            </div>
+        </div>
+        @endauth
     </div>
 </nav>
