@@ -69,7 +69,7 @@
                                     <p class="text-gray-600 text-sm">3 months of hassle-free pet care!</p>
                                 </div>
 
-                                <button class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                                <button onclick="showSubscriptionPopup('Basic')" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-colors text-center">
                                     Subscribe to Basic
                                 </button>
                             </div>
@@ -117,8 +117,7 @@
                                     <div class="text-4xl font-bold mb-2">$49.99</div>
                                     <p class="text-gray-600 text-sm">1 year of premium pet care!</p>
                                 </div>
-
-                                <button class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                                <button onclick="showSubscriptionPopup('Premium')" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-colors text-center">
                                     Subscribe to Premium
                                 </button>
                             </div>
@@ -126,7 +125,118 @@
                     </div>
                 </div>
             </div>
-            </div>
         </section>
     </main>
+
+    <!-- Popup Notification -->
+    <div id="subscriptionPopup" class="fixed bottom-4 right-4 bg-white border border-gray-200 rounded-lg shadow-xl p-6 max-w-80 z-50 hidden">
+        <div class="flex items-start gap-3">
+            <!-- Info Icon -->
+            <div class="flex-shrink-0">
+                <svg class="w-6 h-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <!-- Content -->
+            <div class="flex-1">
+                <h4 class="font-semibold text-gray-900 mb-1">Subscription Request</h4>
+                <p class="text-gray-600 text-sm mb-3" id="popupMessage">
+                    To subscribe to the <span id="planName"></span> plan, please contact our support team who will assist you with placing your subscription box.
+                </p>
+                <div class="flex gap-2">
+                    <a href="mailto:support@petsmart.lk" class="text-xs bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded transition-colors">
+                        Contact Support
+                    </a>
+                    <button onclick="hideSubscriptionPopup()" class="text-xs text-gray-500 hover:text-gray-700 px-2 py-1">
+                        Close
+                    </button>
+                </div>
+            </div>
+            <!-- Close Button -->
+            <button onclick="hideSubscriptionPopup()" class="flex-shrink-0 text-gray-400 hover:text-gray-600">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    @push('styles')
+    <style>
+        /* Custom animation for popup */
+        @keyframes slideInUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutDown {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+        }
+
+        .popup-enter {
+            animation: slideInUp 0.3s ease-out forwards;
+        }
+
+        .popup-exit {
+            animation: slideOutDown 0.3s ease-in forwards;
+        }
+    </style>
+    @endpush
+
+    @push('scripts')
+    <script>
+        function showSubscriptionPopup(planType) {
+            const popup = document.getElementById('subscriptionPopup');
+            const planName = document.getElementById('planName');
+
+            planName.textContent = planType;
+            popup.classList.remove('hidden', 'popup-exit');
+            popup.classList.add('popup-enter');
+
+            // Auto-hide after 8 seconds
+            setTimeout(() => {
+                hideSubscriptionPopup();
+            }, 8000);
+        }
+
+        function hideSubscriptionPopup() {
+            const popup = document.getElementById('subscriptionPopup');
+            popup.classList.remove('popup-enter');
+            popup.classList.add('popup-exit');
+
+            // Hide completely after animation
+            setTimeout(() => {
+                popup.classList.add('hidden');
+                popup.classList.remove('popup-exit');
+            }, 300);
+        }
+
+        // Close popup when clicking outside
+        document.addEventListener('click', function(event) {
+            const popup = document.getElementById('subscriptionPopup');
+            if (!popup.contains(event.target) && !popup.classList.contains('hidden')) {
+                // Check if click was on a subscribe button
+                const isSubscribeButton = event.target.closest('button[onclick*="showSubscriptionPopup"]');
+                if (!isSubscribeButton) {
+                    hideSubscriptionPopup();
+                }
+            }
+        });
+    </script>
+    @endpush
 </x-app-layout>

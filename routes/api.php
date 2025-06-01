@@ -9,6 +9,7 @@ use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\Auth\TokenController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\SubscriptionBoxController;
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -48,6 +49,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [SubscriptionController::class, 'createSubscription']);
         Route::get('/', [SubscriptionController::class, 'getAllSubscriptions']);
         Route::get('/{id}', [SubscriptionController::class, 'getSubscriptionById']);
+    });
+
+    // subscription box routes
+    Route::prefix('subscription-boxes')->group(function () {
+        Route::post('/', [SubscriptionBoxController::class, 'createSubscriptionBox']);
+        Route::get('/', [SubscriptionBoxController::class, 'getSubscriptionBoxesByUserId']);
     });
 
     Route::post('/orders', [OrdersController::class, 'store']);
