@@ -83,6 +83,14 @@
 
             document.querySelector('.add-to-cart-btn').addEventListener('click', function() {
                 const btn = this;
+
+                const token = localStorage.getItem('api_token');
+                if (!token) {
+                    showNotification('Please log in to add items to cart', 'error');
+                    window.location.href = "{{ route('login') }}";
+                    return;
+                }
+
                 addToCartWithQuantity(
                     parseInt(btn.dataset.productId),
                     parseFloat(btn.dataset.price),

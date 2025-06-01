@@ -120,13 +120,13 @@
                         </x-dropdown-link>
 
                         <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
+                        <form method="POST" action="{{ route('logout') }}" id="logout-form">
                             @csrf
 
                             <x-dropdown-link
                                 class="cursor-pointer"
                                 onclick="event.preventDefault();
-                                            this.closest('form').submit();">
+                                            handleLogout(this);">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
@@ -183,13 +183,13 @@
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" id="logout-form-mobile">
                     @csrf
 
                     <x-responsive-nav-link
                         class="cursor-pointer"
                         onclick="event.preventDefault();
-                                        this.closest('form').submit();">
+                                        handleLogout(this);">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>
@@ -209,3 +209,11 @@
         @endauth
     </div>
 </nav>
+
+<script>
+    function handleLogout(element) {
+        localStorage.removeItem('api_token');
+        localStorage.setItem('cart', JSON.stringify([]));
+        element.closest('form').submit();
+    }
+</script>
