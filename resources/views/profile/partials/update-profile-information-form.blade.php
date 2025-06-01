@@ -182,7 +182,6 @@
                             return response.json();
                         })
                         .then(data => {
-                            console.log('Raw orders data:', data);
                             orders = data.data.orders;
                             loading = false;
                         })

@@ -78,7 +78,6 @@ function addToCart(productId, price, name, imageUrl, stockQuantity, category, ev
     if (event) {
         event.stopPropagation();
     }
-    console.log(productId);
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     
     const existingItemIndex = cart.findIndex(item => item.id === parseInt(productId));
@@ -185,7 +184,6 @@ function checkout() {
     }
 
     const token = localStorage.getItem('api_token');
-    console.log(token);
     if (!token) {
         showNotification('Please log in to place an order', 'error');
         return;
@@ -208,7 +206,6 @@ function checkout() {
         delivered_at: null
     };
 
-    console.log(document.querySelector('meta[name="csrf-token"]').content);
 
     fetch('/api/orders', {
         method: 'POST',
@@ -221,7 +218,6 @@ function checkout() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
         if (data.status === 'success') {
             showNotification('Order placed successfully!');
             // Clear cart

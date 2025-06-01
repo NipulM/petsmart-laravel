@@ -118,7 +118,6 @@
             // Check for API token
             const storedToken = window.localStorage.getItem('api_token');
             if (!storedToken) {
-                console.log('No token found, attempting to regenerate...');
                 fetch("{{ route('token.regenerate') }}", {
                         method: 'POST',
                         headers: {
@@ -135,7 +134,6 @@
                         }
                     })
                     .catch(() => {
-                        console.log('Token regeneration failed');
                         window.localStorage.removeItem('api_token');
                     });
             }
