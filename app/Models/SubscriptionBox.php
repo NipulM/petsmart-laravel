@@ -21,8 +21,11 @@ class SubscriptionBox extends Model
     ];
 
     protected $casts = [
-        'order_items' => 'array',
-        'start_date' => 'datetime',
-        'expiry_date' => 'datetime',
+        'order_items' => 'json',
+        'start_date' => 'datetime:Y-m-d H:i:s',
+        'expiry_date' => 'datetime:Y-m-d H:i:s',
+        'total_amount' => 'decimal:2'
     ];
+
+    protected $dateFormat = 'Y-m-d H:i:s';
 }
