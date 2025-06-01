@@ -182,6 +182,7 @@
                             return response.json();
                         })
                         .then(data => {
+                            console.log('Raw orders data:', data);
                             orders = data.data.orders;
                             loading = false;
                         })
@@ -218,9 +219,9 @@
                                 <div class="mt-4">
                                     <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100">Order Items:</h4>
                                     <div class="mt-2 space-y-2">
-                                        <template x-for="item in JSON.parse(order.order_items)" :key="item.id">
+                                        <template x-for="item in order.order_items" :key="item.id || item.product_id">
                                             <div class="flex items-center space-x-4">
-                                                <img :src="item.imageUrl" :alt="item.name" class="w-16 h-16 object-cover rounded">
+                                                <img :src="item.imageUrl || item.image_url" :alt="item.name" class="w-16 h-16 object-cover rounded">
                                                 <div>
                                                     <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="item.name"></p>
                                                     <p class="text-sm text-gray-600 dark:text-gray-400" x-text="'Quantity: ' + item.quantity"></p>
@@ -299,7 +300,7 @@
                                 <div class="mt-4">
                                     <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100">Subscription Items:</h4>
                                     <div class="mt-2 space-y-2">
-                                        <template x-for="item in JSON.parse(subscription.order_items)" :key="item.product_id">
+                                        <template x-for="item in (typeof subscription.order_items === 'string' ? JSON.parse(subscription.order_items) : subscription.order_items)" :key="item.product_id">
                                             <div class="flex items-center space-x-4">
                                                 <img :src="item.image_url" :alt="item.name" class="w-16 h-16 object-cover rounded">
                                                 <div>
