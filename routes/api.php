@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\TokenController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SubscriptionBoxController;
+
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
