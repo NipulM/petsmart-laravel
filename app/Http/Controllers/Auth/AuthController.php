@@ -58,6 +58,26 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out successfully']);
     }
 
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'phone' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
+        ]);
+
+        $user = $request->user();
+
+        $user->update([
+            'phone' => $request->phone,
+            'address' => $request->address,
+        ]);
+
+        return response()->json([
+            'message' => 'Profile updated successfully',
+            'user' => $user
+        ]);
+    }
+
     public function user(Request $request)
     {
         return response()->json($request->user());
