@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\TokenController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SubscriptionBoxController;
+
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -35,6 +36,7 @@ Route::prefix('subscriptions')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
+    Route::put('/user/profile', [AuthController::class, 'updateProfile']);
 
     // Categories routes
     Route::prefix('categories')->group(function () {
